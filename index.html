@@ -1,54 +1,341 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <title>Vibe Quest</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibe Quest — Think You're Nice Online? Prove It.</title>
+  <meta name="description" content="A free social simulator. Face real moments. See your impact. Get your Kindness Score." />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --orange: #f97316; --orange-dark: #ea580c;
+      --violet: #7c3aed; --violet-dark: #6d28d9;
+      --green: #22c55e; --green-bg: #f0fdf4; --green-border: #bbf7d0;
+      --red: #ef4444; --red-bg: #fef2f2; --red-border: #fecaca;
+      --amber-bg: #fffbeb; --amber-border: #fde68a;
+      --slate-950: #020617; --slate-900: #0f172a; --slate-800: #1e293b;
+      --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8;
+      --slate-300: #cbd5e1; --slate-200: #e2e8f0; --slate-100: #f1f5f9;
+      --slate-50: #f8fafc; --white: #ffffff;
+    }
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      overscroll-behavior-y: none;
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      color: var(--slate-900); background: var(--white);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+      line-height: 1.75; font-size: 16px;
     }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+    h1, h2, h3, .nav-logo-text, .nav-cta, .btn-primary, .hero-note, .section-label, .tab, .mode-cta, .score-rank, .score-label, .tool .lb, .tag, .divider, .chat-name, .phone-title, .problem-highlight {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid var(--slate-200); }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--slate-900); }
+    .nav-logo-icon { width: 36px; height: 36px; background: var(--orange); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 17px; box-shadow: 0 4px 14px rgba(249,115,22,0.35); }
+    .nav-logo-text { font-weight: 800; font-size: 19px; letter-spacing: -0.5px; text-transform: uppercase; }
+    .nav-cta { background: var(--orange); color: white; border: none; padding: 12px 30px; border-radius: 100px; font-weight: 800; font-size: 13px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 16px rgba(249,115,22,0.3); }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,115,22,0.4); }
+
+    /* HERO */
+    .hero {
+      padding: 200px 32px 120px;
+      text-align: center; position: relative;
+      background: linear-gradient(180deg, var(--white), var(--slate-50));
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    .animate-float {
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .animate-pop {
-      animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
+    .hero::before { content: ''; position: absolute; top: -300px; left: 50%; transform: translateX(-50%); width: 900px; height: 900px; background: radial-gradient(circle, rgba(249,115,22,0.10), transparent 65%); pointer-events: none; }
+    .hero-emoji { font-size: 72px; margin-bottom: 32px; display: block; animation: fl 3s ease-in-out infinite; }
+    @keyframes fl { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .hero h1 { font-size: clamp(44px, 7.5vw, 82px); font-weight: 800; line-height: 1.0; letter-spacing: -1px; text-transform: uppercase; margin-bottom: 32px; }
+    .hero h1 .gr { background: linear-gradient(135deg, var(--orange), var(--violet)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: clamp(18px, 2.2vw, 21px); color: var(--slate-500); max-width: 460px; margin: 0 auto 48px; font-weight: 500; line-height: 1.8; }
+    .btn-primary { background: var(--orange); color: white; border: none; padding: 20px 48px; border-radius: 100px; font-weight: 800; font-size: 17px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; text-decoration: none; transition: all 0.25s; box-shadow: 0 8px 30px rgba(249,115,22,0.35); display: inline-flex; align-items: center; gap: 10px; }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 40px rgba(249,115,22,0.4); }
+    .btn-primary:active { transform: scale(0.97); }
+    .hero-note { font-size: 12px; color: var(--slate-400); font-weight: 700; text-transform: uppercase; letter-spacing: 2.5px; margin-top: 48px; }
+
+    /* SECTIONS */
+    section { padding: 120px 32px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .section-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: var(--orange); margin-bottom: 20px; text-align: center; }
+    .section-title { font-size: clamp(30px, 5vw, 48px); font-weight: 800; line-height: 1.15; letter-spacing: 0px; text-transform: uppercase; text-align: center; margin-bottom: 20px; }
+    .section-sub { font-size: clamp(16px, 2vw, 19px); color: var(--slate-500); max-width: 480px; margin: 0 auto; font-weight: 500; text-align: center; line-height: 1.8; }
+
+    /* PROBLEM */
+    .problem-section { background: var(--slate-950); color: var(--white); text-align: center; padding: 160px 32px; }
+    .problem-section h2 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; line-height: 1.4; letter-spacing: 2px; word-spacing: 8px; text-transform: uppercase; margin-bottom: 48px; }
+    .problem-section h2 .gr { background: linear-gradient(135deg, var(--orange), var(--violet)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .problem-section p { font-size: 20px; color: var(--slate-400); font-weight: 500; max-width: 500px; margin: 0 auto; line-height: 1.85; margin-top: 48px; }
+    .problem-section p strong { color: var(--white); }
+    .problem-highlight { display: inline-block; background: rgba(249,115,22,0.1); border: 2px solid rgba(249,115,22,0.2); padding: 28px 40px; border-radius: 24px; margin-top: 56px; font-size: 18px; font-weight: 800; color: var(--orange); max-width: 500px; line-height: 1.6; }
+
+    /* PHONE EXAMPLE */
+    .example-section { background: var(--slate-50); padding: 120px 32px 140px; }
+    .phone-mockup { max-width: 420px; margin: 56px auto 0; background: var(--white); border-radius: 40px; border: 4px solid var(--slate-200); overflow: hidden; box-shadow: 0 48px 96px rgba(0,0,0,0.08); }
+    .phone-header { padding: 22px 26px; border-bottom: 1px solid var(--slate-100); display: flex; align-items: center; gap: 12px; }
+    .phone-dot { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; background: linear-gradient(135deg, #f472b6, #ec4899); }
+    .phone-title { font-weight: 800; font-size: 14px; color: var(--slate-800); text-transform: uppercase; }
+    .phone-body { padding: 28px; }
+    .chat-name { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--slate-400); margin-bottom: 10px; }
+    .chat-bubble { padding: 18px 22px; border-radius: 24px; font-size: 16px; font-weight: 500; line-height: 1.6; margin-bottom: 20px; max-width: 88%; background: var(--white); border: 2px solid var(--slate-100); color: var(--slate-800); border-bottom-left-radius: 8px; }
+    .divider { text-align: center; padding: 16px 0; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: var(--slate-300); }
+    .choice { padding: 16px 20px; border-radius: 20px; font-size: 15px; font-weight: 500; line-height: 1.6; margin-bottom: 12px; border: 3px solid var(--slate-100); }
+    .choice.good { border-color: var(--green-border); background: var(--green-bg); }
+    .choice.mid { border-color: var(--amber-border); background: var(--amber-bg); }
+    .choice.bad { border-color: var(--red-border); background: var(--red-bg); }
+    .tag { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 6px; margin-top: 8px; color: white; }
+    .tag-g { background: var(--green); } .tag-a { background: #f59e0b; } .tag-r { background: var(--red); }
+    .impacts { padding: 24px 26px; border-top: 2px solid var(--slate-100); }
+    .impact { padding: 14px 18px; border-radius: 18px; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; }
+    .impact + .impact { margin-top: 10px; }
+    .impact.pos { background: var(--green-bg); border: 2px solid var(--green-border); color: #166534; }
+    .impact.mix { background: var(--amber-bg); border: 2px solid var(--amber-border); color: #92400e; }
+    .impact.neg { background: var(--red-bg); border: 2px solid var(--red-border); color: #991b1b; }
+    .impact-em { font-size: 20px; flex-shrink: 0; }
+
+    /* SCORES */
+    .scores-section { background: white; padding: 120px 32px; }
+    .score-row { display: flex; justify-content: center; gap: 28px; margin-top: 56px; flex-wrap: wrap; }
+    .score-card { background: var(--white); border-radius: 32px; border: 4px solid var(--slate-100); padding: 36px 40px; text-align: center; min-width: 180px; box-shadow: 0 12px 36px rgba(0,0,0,0.04); }
+    .score-num { font-size: 56px; font-weight: 800; line-height: 1; }
+    .score-num.high { color: var(--green); } .score-num.mid { color: #f59e0b; } .score-num.low { color: var(--red); }
+    .score-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--slate-400); margin-top: 10px; }
+    .score-rank { font-size: 14px; font-weight: 800; color: var(--slate-800); margin-top: 4px; text-transform: uppercase; }
+
+    /* MODES */
+    .modes-section { background: var(--slate-50); padding: 120px 32px; }
+    .modes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 56px; }
+    @media (max-width: 700px) { .modes-grid { grid-template-columns: 1fr; } }
+    .mode-card { padding: 48px 40px; border-radius: 36px; border: 4px solid var(--slate-100); background: var(--white); position: relative; overflow: hidden; transition: all 0.3s; }
+    .mode-card:hover { transform: translateY(-4px); box-shadow: 0 20px 56px rgba(0,0,0,0.06); }
+    .mode-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; }
+    .mode-card.ch::before { background: var(--orange); } .mode-card.tu::before { background: var(--violet); }
+    .mode-icon { width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 28px; }
+    .mode-icon.o { background: var(--orange); } .mode-icon.v { background: var(--violet); }
+    .mode-card h3 { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+    .mode-card p { font-size: 16px; color: var(--slate-500); font-weight: 500; line-height: 1.8; margin-bottom: 28px; }
+    .mode-cta { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; padding: 12px 26px; border-radius: 100px; color: white; transition: all 0.2s; }
+    .mode-cta.o { background: var(--orange); } .mode-cta.o:hover { background: var(--orange-dark); }
+    .mode-cta.v { background: var(--violet); } .mode-cta.v:hover { background: var(--violet-dark); }
+
+    /* TOOLS */
+    .tools-section { background: white; padding: 120px 32px; }
+    .tools-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 56px; max-width: 720px; margin-left: auto; margin-right: auto; }
+    @media (max-width: 600px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
+    .tool { background: var(--white); border: 3px solid var(--slate-100); border-radius: 24px; padding: 28px 16px; text-align: center; transition: all 0.2s; }
+    .tool:hover { border-color: var(--violet); transform: translateY(-3px); }
+    .tool .em { font-size: 36px; margin-bottom: 12px; display: block; }
+    .tool .lb { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--slate-800); }
+
+    /* AUDIENCE */
+    .audience-section { background: var(--slate-50); padding: 120px 32px; }
+    .tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 56px auto 40px; }
+    .tab { padding: 12px 26px; border-radius: 100px; border: 3px solid var(--slate-200); background: var(--white); font-weight: 800; font-size: 14px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate-600); }
+    .tab:hover { border-color: var(--orange); color: var(--orange); }
+    .tab.active { background: var(--slate-900); color: var(--white); border-color: var(--slate-900); }
+    .panel { display: none; max-width: 580px; margin: 0 auto; background: var(--white); border-radius: 36px; padding: 48px 44px; border: 4px solid var(--slate-100); }
+    .panel.active { display: block; animation: fu 0.3s ease; }
+    @keyframes fu { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .panel h3 { font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; line-height: 1.2; }
+    .panel p { font-size: 17px; color: var(--slate-500); font-weight: 500; line-height: 1.8; margin-bottom: 0; }
+    .panel p + p { margin-top: 16px; }
+    .panel p strong { color: var(--slate-900); }
+    @media (max-width: 600px) { .panel { padding: 36px 28px; } }
+
+    /* FINAL CTA */
+    .final-cta { background: var(--slate-950); color: white; text-align: center; padding: 140px 32px; }
+    .final-cta h2 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; line-height: 1.15; letter-spacing: 0px; text-transform: uppercase; margin-bottom: 20px; }
+    .final-cta p { font-size: 18px; color: var(--slate-400); font-weight: 500; margin-bottom: 48px; }
+    .final-cta .btn-primary { font-size: 19px; padding: 22px 52px; }
+
+    /* FOOTER */
+    footer { background: var(--slate-950); border-top: 1px solid rgba(255,255,255,0.05); padding: 36px 32px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-brand { display: flex; align-items: center; gap: 8px; }
+    .footer-brand-icon { width: 24px; height: 24px; background: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 11px; }
+    .footer-brand-text { color: var(--slate-500); font-weight: 700; font-size: 12px; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--slate-500); text-decoration: none; font-weight: 700; font-size: 12px; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--orange); }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
   </style>
-<link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-gray-50 text-slate-900">
-  <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+<body>
+
+  <nav><div class="nav-inner">
+    <a href="#" class="nav-logo"><div class="nav-logo-icon">V</div><span class="nav-logo-text">Vibe Quest</span></a>
+
+    <div style="display:flex; gap:14px; align-items:center;">
+      <a href="https://www.vibecheckbot.com" style="text-decoration:none; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--slate-600);">VibeCheckBot</a>
+      <a href="https://felixagaming.github.io/vibe-quest/" class="nav-cta">Play Free</a>
+    </div>
+
+  </div></nav>
+
+
+  <section class="hero"><div class="container">
+    <span class="hero-emoji">🌟</span>
+    <h1>Think you're<br>nice online?<br><span class="gr">Prove it.</span></h1>
+    <p class="hero-sub">A free social simulator. Face real moments. See your impact. Get your Kindness Score.</p>
+    <a href="https://felixagaming.github.io/vibe-quest/" class="btn-primary">Take the Challenge 🔥</a>
+    <p class="hero-note">Free · No sign-up · 2 minutes</p>
+  </div></section>
+
+
+  <section class="problem-section"><div class="container reveal">
+    <h2>You type fast. You hit send.</h2>
+    <h2 style="margin-top: 20px"><span class="gr">You never see<br>what happens next.</span></h2>
+    <p>But they do. They read it ten times. They delete their post.<br><strong>Your bad day just became their bad night.</strong></p>
+    <div class="problem-highlight">Vibe Quest shows you the moment<br>you never get to see.</div>
+  </div></section>
+
+
+  <section class="example-section"><div class="container">
+    <p class="section-label reveal">From The Game</p>
+    <h2 class="section-title reveal">What would you say?</h2>
+
+    <div class="phone-mockup reveal">
+      <div class="phone-header"><div class="phone-dot">💗</div><span class="phone-title">The Fashion Selfie</span></div>
+      <div class="phone-body">
+        <div class="chat-name">Mia</div>
+        <div class="chat-bubble">Tried a new look today! Feeling actually confident for once 💗✨</div>
+
+        <div class="divider">— your choices —</div>
+
+        <div class="choice good">
+          "You look amazing! That confidence really shines through."
+          <br><span class="tag tag-g">Encouraging</span>
+        </div>
+
+        <div class="choice mid">
+          "It's okay I guess. Not really my style but you do you."
+          <br><span class="tag tag-a">Dismissive</span>
+        </div>
+
+        <div class="choice bad">
+          "Confidence is one thing, but that dress is a total disaster 💀"
+          <br><span class="tag tag-r">Rude</span>
+        </div>
+      </div>
+
+      <div class="impacts">
+        <div class="divider">— how mia felt —</div>
+        <div class="impact pos"><span class="impact-em">😊</span><span><strong>Kind →</strong> Massive boost in self-esteem.</span></div>
+        <div class="impact mix"><span class="impact-em">😕</span><span><strong>Dismissive →</strong> Felt her confidence waver.</span></div>
+        <div class="impact neg"><span class="impact-em">😢</span><span><strong>Mean →</strong> Felt humiliated. Deleted the post.</span></div>
+      </div>
+    </div>
+  </div></section>
+
+
+  <section class="scores-section"><div class="container">
+    <p class="section-label reveal">Your Results</p>
+    <h2 class="section-title reveal">Where do you land?</h2>
+    <div class="score-row reveal">
+      <div class="score-card"><div class="score-num high">92%</div><div class="score-label">Kindness</div><div class="score-rank">🏆 Vibe Master</div></div>
+      <div class="score-card"><div class="score-num mid">54%</div><div class="score-label">Kindness</div><div class="score-rank">🔀 Mixed Signals</div></div>
+      <div class="score-card"><div class="score-num low">18%</div><div class="score-label">Kindness</div><div class="score-rank">☢️ Toxic Hazard</div></div>
+    </div>
+  </div></section>
+
+
+  <section class="modes-section"><div class="container">
+    <p class="section-label reveal">Two Ways To Play</p>
+    <div class="modes-grid">
+      <div class="mode-card ch reveal">
+        <div class="mode-icon o">💬</div>
+        <h3>Check Your Vibe</h3>
+        <p>Face real scenarios. Choose your response. See how the other person felt.</p>
+        <a href="https://felixagaming.github.io/vibe-quest/" class="mode-cta o">Play →</a>
+      </div>
+      <div class="mode-card tu reveal">
+        <div class="mode-icon v">💎</div>
+        <h3>Tune Your Vibe</h3>
+        <p>Real strategies for when emotions run high. Tools that work better than a mean reply.</p>
+        <a href="https://felixagaming.github.io/vibe-quest/" class="mode-cta v">Train →</a>
+      </div>
+    </div>
+  </div></section>
+
+
+  <section class="tools-section"><div class="container">
+    <p class="section-label reveal">Strategy Tools</p>
+    <h2 class="section-title reveal">For when your<br>emotions spike.</h2>
+    <div class="tools-grid reveal">
+      <div class="tool"><span class="em">🌬️</span><div class="lb">Deep Breath</div></div>
+      <div class="tool"><span class="em">⏱️</span><div class="lb">Pause 5s</div></div>
+      <div class="tool"><span class="em">🔄</span><div class="lb">Reframe</div></div>
+      <div class="tool"><span class="em">🚶</span><div class="lb">Walk Away</div></div>
+      <div class="tool"><span class="em">🖐️</span><div class="lb">5-5-5 Rule</div></div>
+      <div class="tool"><span class="em">📝</span><div class="lb">Draft & Delete</div></div>
+      <div class="tool"><span class="em">🔇</span><div class="lb">Mute Thread</div></div>
+      <div class="tool"><span class="em">🪤</span><div class="lb">Avoid Bait</div></div>
+    </div>
+  </div></section>
+
+
+  <section class="audience-section"><div class="container">
+    <p class="section-label reveal">Free Resource</p>
+    <h2 class="section-title reveal">Built for everyone.</h2>
+
+    <div class="tabs reveal">
+      <button class="tab active" onclick="showTab('teachers')">🍎 Teachers</button>
+      <button class="tab" onclick="showTab('parents')">🏠 Parents</button>
+      <button class="tab" onclick="showTab('creators')">📱 Creators</button>
+      <button class="tab" onclick="showTab('gamers')">🎮 Gamers</button>
+    </div>
+
+    <div class="panel active" id="panel-teachers">
+      <h3>5 minutes. No prep.</h3>
+      <p>Students play, get their Kindness Score, and the room starts talking about online behavior. No worksheets needed.</p>
+      <p><strong>Use for:</strong> Digital citizenship · Anti-bullying · SEL · Advisory.</p>
+    </div>
+
+    <div class="panel" id="panel-parents">
+      <h3>Start the conversation.</h3>
+      <p>Your kid isn't cruel — they're just fast. Vibe Quest shows them the reaction they never see. Take it together.</p>
+    </div>
+
+    <div class="panel" id="panel-creators">
+      <h3>Challenge your community.</h3>
+      <p>Share it. Let your audience post their Kindness Score. Everyone types differently when they see the impact.</p>
+    </div>
+
+    <div class="panel" id="panel-gamers">
+      <h3>Don't throw someone's day.</h3>
+      <p>You flame and forget in 5 seconds. They don't. See what happens next — and get tools for when the tilt hits.</p>
+    </div>
+  </div></section>
+
+
+  <section class="final-cta"><div class="container reveal">
+    <h2>Ready to see<br>your real vibe?</h2>
+    <p>2 minutes. Free forever.</p>
+    <a href="https://felixagaming.github.io/vibe-quest/" class="btn-primary">Take the Challenge 🔥</a>
+  </div></section>
+
+
+  <footer><div class="footer-inner">
+    <div class="footer-brand"><div class="footer-brand-icon">V</div><span class="footer-brand-text">Vibe Quest by VibeCheckBot</span></div>
+    <div class="footer-links"><a href="https://www.vibecheckbot.com">vibecheckbot.com</a><a href="mailto:go@vibecheckbot.com">Contact</a></div>
+  </div></footer>
+
+
+  <script>
+    function showTab(n) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('panel-' + n).classList.add('active');
+      event.target.classList.add('active');
+    }
+    const obs = new IntersectionObserver(e => {
+      e.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+
 </body>
 </html>
